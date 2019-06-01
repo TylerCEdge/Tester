@@ -4,6 +4,8 @@ var expressHandlebars = require("express-handlebars");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
+require("./models/Index");
+
 // Port configuration
 
 var PORT = process.env.PORT || 3000;
