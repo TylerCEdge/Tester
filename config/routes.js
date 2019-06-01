@@ -45,6 +45,11 @@ module.exports = function (router) {
             res.json(data);
         });
     });
+    router.patch("/api/headlines", function(req, res) {
+        headlinesController.update(req.body, function(err, data) {
+            res.json(data);
+        });
+    });
     router.get("/api/notes/:headline_id?", function (req, res) {
         var query = {};
         if (req.params.headline_id) {

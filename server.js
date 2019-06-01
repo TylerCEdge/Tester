@@ -5,8 +5,6 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var logger = require("morgan")
 
-require("./models/Index");
-
 // Port configuration
 
 var PORT = process.env.PORT || 3000;
@@ -49,7 +47,7 @@ app.use(router);
 // If deployed, use the deployed database.  Otherwise use the local mongoHeadlines database
 var db = (process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines");
 
-mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true }, function(err) {
+mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true }, function (err) {
   if (err) {
     console.log(err);
   }
@@ -60,6 +58,6 @@ mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true }, function(e
 
 //Listen on PORT
 
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log("Listening on http://localhost:" + PORT)
 });

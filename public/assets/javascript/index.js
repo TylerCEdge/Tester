@@ -89,10 +89,10 @@ $(document).ready(function () {
         console.log(articleToSave)
 
         $.ajax({
-                method: "PATCH",
-                url: "/api/headlines",
-                data: articleToSave
-            })
+            method: "PATCH",
+            url: "/api/headlines",
+            data: articleToSave
+        })
             .then(function (data) {
 
 
