@@ -18,34 +18,34 @@ function scrape(cb) {
 
         // Now, we grab every h2 within an article tag, and do the following:
         $("h2").each(function () {
-            // Save an empty result object
-            var result = {};
+            // Save an empty dataToAdd object
+            var dataToAdd = {};
 
-            // Add the text and href of every link, and save them as properties of the result object
-            result.title = $(this)
+            // Add the text and href of every link, and save them as properties of the dataToAdd object
+            dataToAdd.headline = $(this)
                 .text()
                 // Removes unwanted characters from the titles
                 .replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' ');
-            result.link = $(this)
+            dataToAdd.link = $(this)
                 .parent().parent().parent().parent()
                 .find("a")
                 .attr("href");
-            result.img = $(this)
+            dataToAdd.img = $(this)
                 .parent().parent().parent()
                 .find("div.home-img").find("div.img-ratio").find("img")
                 .attr("data-src")
-            result.summary = $(this)
+            dataToAdd.summary = $(this)
                 .parent()
                 .find("div.home-desc")
                 .text()
                 .replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' ')
 
 
-            // console.log(result);
-            articles.push(result);
-            // for (i = 0; i = result.length; i++) {
-            //     articles.push(result[i]);
+            // // console.log(dataToAdd);
+            // for (i = 0; i = dataToAdd.length; i++) {
+            //     articles.push(dataToAdd[i]);
             // }
+            articles.push(dataToAdd);
         });
         cb(articles);
         console.log(articles);

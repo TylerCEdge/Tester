@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     var articleContainer = $(".article-container");
-    $(document).on("click", ".btn.save", handleArticleSave);
+    $(document).on("click", ".btn-save", handleArticleSave);
     $(document).on("click", ".scrape-new", handleArticleScrape);
 
     initPage();
@@ -15,8 +15,7 @@ $(document).ready(function () {
 
                 if (data && data.length) {
                     renderArticles(data);
-                }
-                else {
+                } else {
 
                     renderEmpty();
                 }
@@ -28,21 +27,22 @@ $(document).ready(function () {
         var articlePanels = [];
 
 
-        for (var i = 0; i < articles.length; i__) {
+        for (var i = 0; i < articles.length; i++) {
             articlePanels.push(createPanel(articles[i]));
         }
         articleContainer.append(articlePanels);
     }
+
     function createPanel(article) {
 
 
 
         var panel =
             $(["<div class='panel panel-default'>",
-                "div class='panel-heading'>",
+                "<div class='panel-heading'>",
                 "<h3>",
                 article.headline,
-                "<a class='btn btn-success save'>",
+                "<a class='btn btn-success btn-save'>",
                 "save Article",
                 "</a>",
                 "</h3>",
@@ -86,31 +86,32 @@ $(document).ready(function () {
 
         var articleToSave = $(this).parents(".panel").data();
         articleToSave.saved = true;
+        console.log(articleToSave)
 
         $.ajax({
-            method: "PATCH",
-            url: "/api/headlines",
-            data: articleToSave
-        })
-        .then(function(data) {
+                method: "PATCH",
+                url: "/api/headlines",
+                data: articleToSave
+            })
+            .then(function (data) {
 
 
-            if (data.ok) {
+                if (data.ok) {
 
-                initPage();
-            }
-        });
+                    initPage();
+                }
+            });
     }
 
     function handleArticleScrape() {
 
         $.get("/api/fetch")
-        .then(function(data) {
+            .then(function (data) {
 
 
 
-            initPage();
-            bootbox.alert("<h3 class='text-center m-top-80'>" + data.message + "<h3>")
-        });
+                initPage();
+                bootbox.alert("<h3 class='text-center m-top-80'>" + data.message + "<h3>")
+            });
     }
 });
