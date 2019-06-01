@@ -24,22 +24,22 @@ $(document).ready(function () {
 
     function renderArticles(articles) {
 
-        var articlePanels = [];
+        var articleCards = [];
 
 
         for (var i = 0; i < articles.length; i++) {
-            articlePanels.push(createPanel(articles[i]));
+            articleCards.push(createCard(articles[i]));
         }
-        articleContainer.append(articlePanels);
+        articleContainer.append(articleCards);
     }
 
-    function createPanel(article) {
+    function createCard(article) {
 
 
 
-        var panel =
-            $(["<div class='panel panel-default'>",
-                "<div class='panel-heading'>",
+        var card =
+            $(["<div class='card'>",
+                "<div class='card-header text-center'>",
                 "<h3>",
                 article.headline,
                 "<a class='btn btn-success btn-save'>",
@@ -47,16 +47,16 @@ $(document).ready(function () {
                 "</a>",
                 "</h3>",
                 "</div>",
-                "<div class='panel-body'>",
+                "<div class='card-body text-center'>",
                 article.summary,
                 "</div>",
                 "</div>"
             ].join(""));
 
 
-        panel.data("_id", article._id);
+        card.data("_id", article._id);
 
-        return panel;
+        return card;
     }
 
     function renderEmpty() {
@@ -84,7 +84,7 @@ $(document).ready(function () {
 
 
 
-        var articleToSave = $(this).parents(".panel").data();
+        var articleToSave = $(this).parents(".card").data();
         articleToSave.saved = true;
         console.log(articleToSave)
 

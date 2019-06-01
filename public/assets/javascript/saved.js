@@ -24,22 +24,22 @@ $(document).ready(function () {
     }
     function renderArticles(articles) {
 
-        var articlePanels = [];
+        var articleCards = [];
 
 
         for (var i = 0; i < articles.length; i++) {
-            articlePanels.push(createPanel(articles[i]));
+            articleCards.push(createCard(articles[i]));
         }
-        articleContainer.append(articlePanels);
+        articleContainer.append(articleCards);
     }
 
-    function createPanel(article) {
+    function createCard(article) {
 
 
 
-        var panel =
-            $(["<div class='panel panel-default'>",
-                "<div class='panel-heading'>",
+        var card =
+            $(["<div class='card'>",
+                "<div class='card-header text-center'>",
                 "<h3>",
                 article.headline,
                 "<a class='btn btn-danger delete'>",
@@ -48,16 +48,16 @@ $(document).ready(function () {
                 "<a class='btn btn-info notes'>Article Notes</a>",
                 "</h3>",
                 "</div>",
-                "<div class='panel-body'>",
+                "<div class='card-body text-center'>",
                 article.summary,
                 "</div>",
                 "</div>"
             ].join(""));
 
 
-        panel.data("_id", article._id);
+        card.data("_id", article._id);
 
-        return panel;
+        return card;
     }
 
     function renderEmpty() {
@@ -68,11 +68,11 @@ $(document).ready(function () {
             $(["<div class='alert alert-warning text-center'>",
                 "<h4>Uh Oh, Looks like we don't have any new articles.</h4>",
                 "</div>",
-                "<div class='panel panel-default'>",
-                "<div class='panel-heading text-center'>",
+                "<div class='card card-default'>",
+                "<div class='card-heading text-center'>",
                 "<h3>Would You Like To Browse Available Articles?</h3>",
                 "</div>",
-                "<div class='panel-body text-center'>",
+                "<div class='card-body text-center'>",
                 "<h4><a class='scrape-new'>Browse Articles</a></h4>",
                 "</div>",
                 "</div"
@@ -109,7 +109,7 @@ $(document).ready(function () {
         $(".note-container").append(notesToRender);
     }
     function handleArticleDelete() {
-        var articleToDelete = $(this).parents(".panel").data();
+        var articleToDelete = $(this).parents(".card").data();
 
         $.ajax({
             method: "DELETE",
@@ -121,7 +121,7 @@ $(document).ready(function () {
         });
     }
     function handleArticleNotes() {
-        var currentArticle = $(this).parents(".panel").data();
+        var currentArticle = $(this).parents(".card").data();
         $.get("/api/notes/" + currentArticle._id).then(function (data) {
             var modalText = [
                 "<div class='container-fluid text-center'>",
