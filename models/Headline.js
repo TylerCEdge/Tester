@@ -12,15 +12,13 @@ var headlineSchema = new Schema({
     required: true,
     unique: true
   },
-  link: {
+  url: {
     type: String,
     required: true,
-    unique: true
   },
   img: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   // `link` is required and of type String
   summary: {

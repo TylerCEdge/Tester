@@ -12,15 +12,16 @@ $(document).ready(function () {
     initPage();
 
     function initPage() {
-        $.get("/api/headlines?saved=true").then(function (data) {
+        $.get("/api/headlines?saved=true")
+            .then(function (data) {
 
-            if (data && data.length) {
-                renderArticles(data);
-            }
-            else {
-                renderEmpty();
-            }
-        });
+                if (data && data.length) {
+                    renderArticles(data);
+                }
+                else {
+                    renderEmpty();
+                }
+            });
     }
     function renderArticles(articles) {
 
@@ -30,33 +31,60 @@ $(document).ready(function () {
         for (var i = 0; i < articles.length; i++) {
             articleCards.push(createCard(articles[i]));
         }
+
         articleContainer.append(articleCards);
     }
 
+    // function createCard(article) {
+
+
+
+    //     var card =
+    //         $(["<div class='card'>",
+    //             "<div class='card-header text-center'>",
+    //             "<h3>",
+    //             article.headline,
+    //             "<a class='btn btn-danger delete'>",
+    //             "Delete From Saved",
+    //             "</a>",
+    //             "<a class='btn btn-info notes'>Article Notes</a>",
+    //             "</h3>",
+    //             "</div>",
+    //             "<div class='card-body text-center'>",
+    //             article.summary,
+    //             "</div>",
+    //             "</div>"
+    //         ].join(""));
+
+
+    //     card.data("_id", article._id);
+
+    //     return card;
+    // }
+
     function createCard(article) {
+        // This function takes in a single JSON object for an article/headline
+        // It constructs a jQuery element containing all of the formatted HTML for the
+        // article card
+        var card = $("<div class='card'>");
+        var cardHeader = $("<div class='card-header'>").append(
+            $("<h3>").append(
+                $("<a class='article-link' target='_blank' rel='noopener noreferrer'>")
+                    .attr("href", article.url)
+                    .text(article.headline),
+                $("<a class='btn btn-danger delete'>Delete From Saved</a>"),
+                $("<a class='btn btn-info notes'>Article Notes</a>")
+            )
+        );
 
+        var cardBody = $("<div class='card-body'>").text(article.summary);
 
+        card.append(cardHeader, cardBody);
 
-        var card =
-            $(["<div class='card'>",
-                "<div class='card-header text-center'>",
-                "<h3>",
-                article.headline,
-                "<a class='btn btn-danger delete'>",
-                "Delete From Saved",
-                "</a>",
-                "<a class='btn btn-info notes'>Article Notes</a>",
-                "</h3>",
-                "</div>",
-                "<div class='card-body text-center'>",
-                article.summary,
-                "</div>",
-                "</div>"
-            ].join(""));
-
-
+        // We attach the article's id to the jQuery element
+        // We will use this when trying to figure out which article the user wants to remove or open notes for
         card.data("_id", article._id);
-
+        // We return the constructed card jQuery element
         return card;
     }
 
@@ -65,18 +93,20 @@ $(document).ready(function () {
 
 
         var emptyAlert =
-            $(["<div class='alert alert-warning text-center'>",
+            $([
+                "<div class='alert alert-warning text-center'>",
                 "<h4>Uh Oh, Looks like we don't have any new articles.</h4>",
                 "</div>",
-                "<div class='card card-default'>",
-                "<div class='card-heading text-center'>",
-                "<h3>Would You Like To Browse Available Articles?</h3>",
+                "<div class='card'>",
+                "<div class='card-header text-center'>",
+                "<h3>Would You Like To Browse Avaiable Articles?</h3>",
                 "</div>",
                 "<div class='card-body text-center'>",
-                "<h4><a class='scrape-new'>Browse Articles</a></h4>",
+                "<h4><a href='/saved'>Go To Saved Articles</a></h4>",
                 "</div>",
-                "</div"
+                "</div>"
             ].join(""));
+
         articleContainer.append(emptyAlert);
     }
 
@@ -88,11 +118,12 @@ $(document).ready(function () {
         var currentNote;
         if (!data.notes.length) {
 
-            currentNote = [
-                "<li class='list-group-item'>",
+            currentNote = $([
+                "<li class='list-group-item note'>",
                 "No notes for this article yet.",
                 "</li>"
-            ].join("");
+            ].join(""));
+
             notesToRender.push(currentNote);
         }
         else {
@@ -102,14 +133,19 @@ $(document).ready(function () {
                     "li class='btn btn-danger note-delete'>x</button>",
                     "</li>"
                 ].join(""));
+
                 currentNote.children("button").data("_id", data.notes[i]._id);
+
                 notesToRender.push(currentNote);
             }
         }
         $(".note-container").append(notesToRender);
     }
+
     function handleArticleDelete() {
-        var articleToDelete = $(this).parents(".card").data();
+        var articleToDelete = $(this)
+            .parents(".card")
+            .data();
 
         $.ajax({
             method: "DELETE",
@@ -120,35 +156,61 @@ $(document).ready(function () {
             }
         });
     }
-    function handleArticleNotes() {
-        var currentArticle = $(this).parents(".card").data();
+
+    function handleArticleNotes(event) {
+
+        var currentArticle = $(this)
+            .parents(".card")
+            .data();
+
+        // $.get("/api/notes/" + currentArticle._id).then(function (data) {
+        //     var modalText = $([
+        //         "<div class='container-fluid text-center'>",
+        //         "<h4>Notes For Article: ",
+        //         currentArticle._id,
+        //         "</h4>",
+        //         "<hr />",
+        //         "<ul class='list-group note-container'>",
+        //         "<ul>",
+        //         "<textarea placeholder='New Note' rows='4' cols='60'></textarea>",
+        //         "<button class='btn btn-success save'>Save Note</bbutton>",
+        //         "</div"
+        //     ].join(""));
+
         $.get("/api/notes/" + currentArticle._id).then(function (data) {
-            var modalText = [
-                "<div class='container-fluid text-center'>",
-                "<h4>Notes For Article: ",
-                currentArticle._id,
-                "</h4>",
-                "<hr />",
-                "<ul class='list-group note-container'>",
-                "<ul>",
-                "<textarea placeholder='New Note' rows='4' cols='60'></textarea>",
-                "<button class='btn btn-success save'>Save Note</bbutton>",
-                "</div"
-            ].join("");
+            // Constructing our initial HTML to add to the notes modal
+            var modalText = $("<div class='container-fluid text-center'>").append(
+                $("<h4>").text("Notes For Article: " + currentArticle._id),
+                $("<hr>"),
+                $("<ul class='list-group note-container'>"),
+                $("<textarea placeholder='New Note' rows='4' cols='60'>"),
+                $("<button class='btn btn-success save'>Save Note</button>")
+            );
+
             bootbox.dialog({
                 message: modalText,
                 closeButton: true
             });
+            var noteData = {
+                _headlineId: currentArticle._id,
+                notes: data || []
+            };
             $(".btn.save").data("article", noteData);
+
             renderNotesList(noteData);
         });
     }
+
     function handleNoteSave() {
+
         var noteData;
-        var newNote = $(".bootbox-body textarea").val().trim();
+        var newNote = $(".bootbox-body textarea")
+            .val().
+            trim();
+
         if (newNote) {
             noteData = {
-                _id: $(this).data("article")._id,
+                _headlineId: $(this).data("article")._id,
                 noteText: newNote
             };
             $.post("/api/notes", noteData).then(function () {
@@ -156,6 +218,7 @@ $(document).ready(function () {
             });
         }
     }
+
     function handleNoteDelete() {
         var noteToDelete = $(this).data("_id");
         $.ajax({

@@ -8,9 +8,12 @@ var headlinesController = require("../controllers/headlines");
 var notesController = require("../controllers/notes");
 
 module.exports = function (router) {
+    // Home page route
     router.get("/", function (req, res) {
         res.render("home");
     });
+
+    // Saved page route
     router.get("/saved", function (req, res) {
         res.render("saved");
     });
@@ -19,7 +22,7 @@ module.exports = function (router) {
         headlinesController.fetch(function (err, docs) {
             if (!docs || docs.insertedCount === 0) {
                 res.json({
-                    message: "no new articles today. Check back tomorrow!"
+                    message: "No new articles today. Check back tomorrow!"
                 });
             }
             else {
@@ -29,6 +32,7 @@ module.exports = function (router) {
             }
         });
     });
+
     router.get("/api/headlines", function (req, res) {
         var query = {};
         if (req.query.saved) {
@@ -38,18 +42,21 @@ module.exports = function (router) {
             res.json(data);
         });
     });
+
     router.delete("/api/headlines/:id", function (req, res) {
         var query = {};
         query._id = req.params.id;
-        headlinesController.delete(query, function (err, data) {
+        notesController.delete(query, function (err, data) {
             res.json(data);
         });
     });
-    router.patch("/api/headlines", function(req, res) {
-        headlinesController.update(req.body, function(err, data) {
+
+    router.patch("/api/headlines", function (req, res) {
+        headlinesController.update(req.body, function (err, data) {
             res.json(data);
         });
     });
+
     router.get("/api/notes/:headline_id?", function (req, res) {
         var query = {};
         if (req.params.headline_id) {
@@ -59,6 +66,7 @@ module.exports = function (router) {
             res.json(data);
         });
     });
+
     router.delete("/api/notes/:id", function (req, res) {
         var query = {};
         query._id = req.params.id;
@@ -66,6 +74,7 @@ module.exports = function (router) {
             res.json(data);
         });
     });
+
     router.post("/api/notes", function (req, res) {
         notesController.save(req.body, function (data) {
             res.json(data);
