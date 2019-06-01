@@ -41,12 +41,14 @@ function scrape(cb) {
                 .replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' ')
 
 
-           console.log(result);
-            for (i = 0; i = result.length; i++) {
-                articles.push(result[i]);
-            }
+            // console.log(result);
+            articles.push(result);
+            // for (i = 0; i = result.length; i++) {
+            //     articles.push(result[i]);
+            // }
         });
         cb(articles);
+        console.log(articles);
     });
 };
 
