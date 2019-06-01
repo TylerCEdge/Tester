@@ -3,6 +3,7 @@ var express = require("express");
 var expressHandlebars = require("express-handlebars");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var logger = require("morgan")
 
 require("./models/Index");
 
@@ -13,6 +14,8 @@ var PORT = process.env.PORT || 3000;
 // Instantiate Express App
 
 var app = express();
+
+app.use(logger("dev"));
 
 // Express Router Config
 
@@ -46,7 +49,7 @@ app.use(router);
 // If deployed, use the deployed database.  Otherwise use the local mongoHeadlines database
 var db = (process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines");
 
-mongoose.connect(db, function(err) {
+mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true }, function(err) {
   if (err) {
     console.log(err);
   }

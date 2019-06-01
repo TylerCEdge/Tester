@@ -4,7 +4,6 @@
 // Require axios and cheerio
 var axios = require("axios");
 var cheerio = require("cheerio");
-var db = require("../models/Index")
 
 
 var URL = "https://thehackernews.com/search?"
@@ -23,7 +22,7 @@ function scrape(cb) {
             var dataToAdd = {};
 
             // Add the text and href of every link, and save them as properties of the dataToAdd object
-            dataToAdd.title = $(this)
+            dataToAdd.headline = $(this)
                 .text()
                 // Removes unwanted characters from the titles
                 .replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' ');
@@ -42,11 +41,11 @@ function scrape(cb) {
                 .replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' ')
 
 
-            // console.log(dataToAdd);
-            articles.push(dataToAdd);
+            // // console.log(dataToAdd);
             // for (i = 0; i = dataToAdd.length; i++) {
             //     articles.push(dataToAdd[i]);
             // }
+            articles.push(dataToAdd);
         });
         cb(articles);
         console.log(articles);

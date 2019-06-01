@@ -6,7 +6,7 @@ $(document).ready(function () {
     $(document).on("click", ".btn.delete", handleArticleDelete);
     $(document).on("click", ".btn.notes", handleArticleNotes);
     $(document).on("click", ".btn.save", handleNoteSave);
-    $(document).on("click", ".btn.note-delte", handleNoteDelete);
+    $(document).on("click", ".btn.note-delete", handleNoteDelete);
 
 
     initPage();
@@ -39,7 +39,7 @@ $(document).ready(function () {
 
         var panel =
             $(["<div class='panel panel-default'>",
-                "div class='panel-heading'>",
+                "<div class='panel-heading'>",
                 "<h3>",
                 article.headline,
                 "<a class='btn btn-danger delete'>",
@@ -72,7 +72,7 @@ $(document).ready(function () {
                 "<div class='panel-heading text-center'>",
                 "<h3>Would You Like To Browse Available Articles?</h3>",
                 "</div>",
-                "div class='panel-body text-center'>",
+                "<div class='panel-body text-center'>",
                 "<h4><a class='scrape-new'>Browse Articles</a></h4>",
                 "</div>",
                 "</div"
